@@ -1,8 +1,11 @@
 from greek_accentuation.characters import *
 
 if __name__ == '__main__':
-    text = open("apokaluyis iakwb.txt", 'r')
-    text = text.read()
+    file_name = input("enter an encoded greek text from early christian writings: ")
+    #file_name = "apokaluyis iakwb.txt"
+    file = open(file_name, 'r')
+    text = file.read()
+    file.close()
     greekCharsLower = "αβγδεζηθικλμνξοπρσςτυφχψω"
     greekCharsUpper = "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΣΤΥΦΧΨΩ"
     latinCharslower = "abgdezhqiklmnxoprsvtufcyw"
@@ -18,46 +21,47 @@ if __name__ == '__main__':
                 i += 1
                 continue
             if text[i].isalpha() or text[i] == " ":
-                newChar = text[i]
+                new_char = text[i]
 
                 for j in range(1, 3):
                     if text[i+j] not in "jJ<>=+[]|~":
                         break
                     if text[i + j] == 'j':
-                        newChar = add_breathing(newChar, SMOOTH)
+                        new_char = add_breathing(new_char, SMOOTH)
                         continue
                     if text[i + j] == 'J':
-                        newChar = add_breathing(newChar, ROUGH)
+                        new_char = add_breathing(new_char, ROUGH)
                         continue
                     if text[i + j] == '~':
-                        newChar = add_diacritic(newChar, CIRCUMFLEX)
+                        new_char = add_diacritic(new_char, CIRCUMFLEX)
                         continue
                     if text[i + j] == ']':
-                        newChar = add_breathing(add_diacritic(newChar, ACUTE), SMOOTH)
+                        new_char = add_breathing(add_diacritic(new_char, ACUTE), SMOOTH)
                         continue
                     if text[i + j] == '[':
-                        newChar = add_breathing(add_diacritic(newChar, ACUTE), ROUGH)
+                        new_char = add_breathing(add_diacritic(new_char, ACUTE), ROUGH)
                         continue
                     if text[i + j] == '+':
-                        newChar = add_breathing(add_diacritic(newChar, CIRCUMFLEX), SMOOTH)
+                        new_char = add_breathing(add_diacritic(new_char, CIRCUMFLEX), SMOOTH)
                         continue
                     if text[i + j] == '>':
-                        newChar = add_diacritic(newChar, ACUTE)
+                        new_char = add_diacritic(new_char, ACUTE)
                         continue
                     if text[i + j] == '<':
-                        newChar = add_diacritic(newChar, GRAVE)
+                        new_char = add_diacritic(new_char, GRAVE)
                         continue
                     if text[i + j] == '|':
-                        newChar = add_diacritic(newChar, IOTA_SUBSCRIPT)
+                        new_char = add_diacritic(new_char, IOTA_SUBSCRIPT)
                         continue
-                new_text += newChar
+                new_text += new_char
             else:
                 new_text += text[i]
             i += 1
         new_text += text[-1]
     except IndexError:
         pass
-
-
-
-    print(new_text)
+    new_file_name = file_name.split('.')[0]
+    new_file_name += "_decoded.txt"
+    with open(new_file_name, 'w', encoding='utf-8') as new_file:
+        new_file.writelines(new_text)
+        new_file.close()
